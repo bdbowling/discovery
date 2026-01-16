@@ -1,0 +1,16 @@
+#Start the docker container for network discovery
+docker run --env-file .env --name orb-agent  --restart unless-stopped  --network host --user root  --cap-add NET_RAW --cap-add NET_ADMIN  --memory=4g --cpus=2 --ulimit nofile=65535  -v "$(pwd)":/opt/orb/ -e LOG_LEVEL=DEBUG  -d netboxlabs/orb-agent:develop run -c /opt/orb/network.discovery.yaml
+
+#keeps the same orb-agent just restarts the container
+docker start orb-agent
+
+#Look the logs
+docker logs --tail 100 orb-agent
+or
+docker logs -f orb-agent
+
+#Stop docker container
+docker stop orb-agent
+
+#Run arista discovery
+docker run --rm --env-file .env   -e ORB_LOG_LEVEL=debug   -v "$(pwd)":/opt/orb/   netboxlabs/orb-agent:latest run -c /opt/orb/arista.discovery.yaml

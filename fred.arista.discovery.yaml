@@ -1,0 +1,30 @@
+orb:
+  config_manager:
+    active: local
+  backends:
+    device_discovery:
+    common:
+      diode:
+        target: grpc://10.168.251.14:80/diode
+        client_id: ${DIODE_CLIENT_ID}
+        client_secret: ${DIODE_CLIENT_SECRET}
+        agent_name: orb1
+        timeout: 10
+  policies:
+    device_discovery:
+      arista_lab:
+        config:
+          schedule:  "* * * * *"   # every minute for testing
+          defaults:
+            site: DM-Akron
+            role: "Switch"
+        scope:
+          - driver: eos
+            hostname: 10.168.251.21
+            username: netbox
+            password: ${ARISTA_EAPI_PASS}
+            optional_args:
+              transport: http    # explicit for EOS eAPI
+              port: 80
+              timeout: 30
+              

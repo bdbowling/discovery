@@ -1,0 +1,27 @@
+orb:
+  config_manager:
+    active: local
+  backends:
+    network_discovery:
+    common:
+      diode:
+        target: grpc://10.168.251.14:80/diode
+        client_id: ${DIODE_CLIENT_ID}
+        client_secret: ${DIODE_CLIENT_SECRET}
+        agent_name: orb1
+        timeout: 5
+  policies:
+    network_discovery:
+      discovery_1:
+        config:
+          schedule: "* * * * *"       # every minute for testing
+          timeout: 10
+          dns_servers:
+            - 10.168.251.16
+          defaults:
+            description: "IP discovered by network discovery"
+            tags: [net-discovery, orb-agent]
+        scope:
+          targets:
+            - 10.168.251.0/24
+            - fredandbrit.fnb
